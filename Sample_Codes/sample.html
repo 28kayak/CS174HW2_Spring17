@@ -51,31 +51,47 @@ function format2Table(xml)
   console.log(plains[0].getElementsByTagName("Hubs")[0].getElementsByTagName("Hub")[0].innerHTML);
   console.log(plains[0].getElementsByTagName("Notes")[0].textContent);
   console.log(plains[0]);
+  console.log( plains[0].getElementsByTagName("Plane")[0].textContent);
   //undefined
   //console.log(plains[0].getElementsByTagName("Hubs")[1].getElementsByTagName("Hub")[1].innerHTML);
 
 
   for(i = 0; i < plains.length; i++)
   {
+    var airline = plains[i].getElementsByTagName("Airline")[0].childNodes[0].nodeValue;
+    if (airline == null || airline === undefined)
+    {
+      //in the case where missing ariline tag on xml
+
+    }
     //String concatination with html tags
-    table += "<tr><td>" +
-    plains[i].getElementsByTagName("Airline")[0].childNodes[0].nodeValue +
+    table += "<tr><td>" +airline+
     "</td><td>" +
     plains[i].getElementsByTagName("IATA")[0].childNodes[0].nodeValue +
     "</td><td>";
     var hubs = plains[i].getElementsByTagName("Hubs")[0].getElementsByTagName("Hub");
     table += "<ul>";
-    for (var j = 0; j < hubs.length - 1; j++)
+    for (var j = 0; j < hubs.length; j++)
     {
-      table += "<li>"+ hubs[j].innerHTML + "</li>";
+      table += "<li>"+ hubs[j].innerHTML + "</li>";//puts bullet points for each hub
     }
 
     table += "</ul></td>";// end of hubs
+    //get note text from xml
     table += "<td>"+ plains[i].getElementsByTagName("Notes")[0].textContent +"</td>";
-    table += "<td>" + plains[i].getElementsByTagName("HomePage")[0].textContent +"</td>";
+    //get homepage address from xml
+    var address = plains[i].getElementsByTagName("HomePage")[0].textContent;
+    //create html form with clickable link
+    table += "<td>" +'<a href='+ address +"> "+ address + "</a>"+"</td>";
+    var photoloc = plains[i].getElementsByTagName("Plane")[0].textContent;
+    table += "<td>" + '<img src=' + photoloc + "> </td> "
 
 
-    table += "</tr>";
+
+
+
+
+    table += "</tr>";//the end of table
   }//for
   //insert into table tag of html
   document.getElementById("demo").innerHTML = table;
@@ -87,4 +103,4 @@ function format2Table(xml)
 
 </script>
 </html>
-//Copyright (c) 2016 Copyright Holder All Rights Reserved.
+Copyright (c) 2016 Copyright Holder All Rights Reserved.
