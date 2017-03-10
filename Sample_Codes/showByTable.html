@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<style>
+table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td{
+  padding: 5px
+}
+</style>
+<body>
+
+<button type="button" onclick="loadXMLDoc()">
+  Get CD Collection
+</button>
+<br><br>
+<table id="demo">
+</table>
+</body>
+<script>
+function loadXMLDoc()
+{
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200)
+    {
+      format2Table(this);
+    }
+  };//end of xmlhttp.onreadystatechange
+  xmlhttp.open("GET", "cd_catalog.xml", true);
+  xmlhttp.send();
+}//laodXMLDoc
+function format2Table(xml)
+{
+  var i;
+  var xmlDoc = xml.responseXML;
+  var table = "<tr><th>Artist</th><th>Title</th><th>Coun</th></tr>"; //the first row of the table
+  var cds = xmlDoc.getElementsByTagName("CD");
+  for(i = 0; i < cds.length; i++)
+  {
+    //String concatination with html tags
+    table += "<tr><td>" +
+    cds[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue +
+    "</td><td>" +
+    cds[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue +
+    "</td><td>" +
+    cds[i].getElementsByTagName("COUNTRY")[0].childNodes[0].nodeValue +
+    "</td></tr>";
+  }//for
+  //insert into table tag of html
+  document.getElementById("demo").innerHTML = table;
+}//function format2Table
+</script>
+</html>
