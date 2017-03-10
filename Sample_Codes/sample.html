@@ -1,2 +1,90 @@
+<!DOCTYPE html>
 <html>
+<style>
+table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td{
+  padding: 5px
+}
+</style>
+<body>
+  <form>
+      Enter XML URL<br>
+      <input type="text" name="url" id="url">
+      <br>
+      <input type="button" value="Parse XML" onclick="loadXMLDoc(url)">
+      <br>
+  </form>
+<br><br>
+<table id="demo">
+</table>
+</body>
+<script>
+function loadXMLDoc(url)
+{
+    console.log(this.url.value);
+    console.log("url " + url.value);
+    var file = document.getElementById("url");
+    console.log("file " + file.name);
+    console.log("file name = " + file.value);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+    if(this.readyState == 4 && this.status == 200)
+    {
+      format2Table(this);
+    }
+  };//end of xmlhttp.onreadystatechange
+  console.log("Before open()");
+  xmlhttp.open("GET", this.url.value, true);
+  xmlhttp.send();
+}//laodXMLDoc
+function format2Table(xml)
+{
+  var i;
+  var xmlDoc = xml.responseXML;
+  var table = "<tr><th>Airline</th><th>IATA</th><th>Hubs</th><th>Notes</th><th>HomePage</th><th>Picture</th></tr>"; //the first row of the table
+  var plains = xmlDoc.getElementsByTagName("Row");
+  //var hubs = plains
+
+  console.log(plains[0].getElementsByTagName("Hubs")[0].getElementsByTagName("Hub")[0].innerHTML);
+  console.log(plains[0].getElementsByTagName("Notes")[0].textContent);
+  console.log(plains[0]);
+  //undefined
+  //console.log(plains[0].getElementsByTagName("Hubs")[1].getElementsByTagName("Hub")[1].innerHTML);
+
+
+  for(i = 0; i < plains.length; i++)
+  {
+    //String concatination with html tags
+    table += "<tr><td>" +
+    plains[i].getElementsByTagName("Airline")[0].childNodes[0].nodeValue +
+    "</td><td>" +
+    plains[i].getElementsByTagName("IATA")[0].childNodes[0].nodeValue +
+    "</td><td>";
+    var hubs = plains[i].getElementsByTagName("Hubs")[0].getElementsByTagName("Hub");
+    table += "<ul>";
+    for (var j = 0; j < hubs.length - 1; j++)
+    {
+      table += "<li>"+ hubs[j].innerHTML + "</li>";
+    }
+
+    table += "</ul></td>";// end of hubs
+    table += "<td>"+ plains[i].getElementsByTagName("Notes")[0].textContent +"</td>";
+    table += "<td>" + plains[i].getElementsByTagName("HomePage")[0].textContent +"</td>";
+
+
+    table += "</tr>";
+  }//for
+  //insert into table tag of html
+  document.getElementById("demo").innerHTML = table;
+}//function format2Table
+
+
+
+
+
+</script>
 </html>
+//Copyright (c) 2016 Copyright Holder All Rights Reserved.
